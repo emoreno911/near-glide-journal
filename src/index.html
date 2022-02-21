@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css">
+	<style>
+		.wrap {
+			max-width: 960px;
+			margin: 0 auto;
+			padding: 0 15px;
+		}
+		.table-bordered th, .table-bordered td {
+    	border: 1px solid rgba(0,0,0,0.15);
+		}
+		table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+    	border-bottom-width: 1px;
+		}
+		table.table-bordered.dataTable th, table.table-bordered.dataTable td {
+      border-left-width: 1px; 
+		}
+		a {
+			color: #9450FC;
+		}
+		img {
+			width: 48px;
+			height: 48px;
+		}
+		h2.title span {
+			vertical-align: bottom;
+		}
+		b {
+			font-weight: 700;
+			color: #9450FC;
+		}
+	</style>
+
+	<title>Trading Journal</title>
+</head>
+<body>
+	<div class="wrap pb-5">
+		<h2 class="title mt-5 mb-3">
+			<img src="./TJIcon.png" alt="icon-journal">
+			<span>Trading Journal</span>
+		</h2>
+		<div class="about">
+			<p>Trading Journal is an app who allow you to keep track of all your trades in a single app</p>
+			<p>
+				This app is using the following services and APIs: 
+				<ul>
+					<li><b>Airtable</b> to store transactions data</li>
+					<li><b>Glide and Google Sheets</b></li>
+					<li><b>Pipedream</b> for Webhooks and Blockchain interactions</li>
+					<li><b>Diadata</b> for market's price and volume data</li>
+					<li><b>Coingecko</b> for spaklines data</li>
+					<li><b>Quickchart.io</b> for sparkline charts</li>
+				</ul>
+			</p>
+			<p>
+				<a href="https://trading-journal.glideapp.io/" target="_blank">Glide App</a> | 
+				<a href="https://github.com/emoreno911/near-glide-journal" target="_blank">Contract Repo</a>
+			</p>
+		</div>
+		
+		<div class="mt-5 mb-3">
+			<h3 class="title">
+				<span>Blockchain TXs</span>
+			</h3>
+			<span>Transactions made by Trading Journal's Glide app on NEAR's Blockchain</span>
+		</div>
+
+		<table id="example" class="table table-striped table-bordered" style="width:100%"></table>
+	</div>
+
+	
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			fetch('https://api.airtable.com/v0/apphCpZnFm4WRINNU/Transactions?api_key=keyjAtv5w8etXZtwg')
+				.then(r => r.json())
+				.then(response => {
+					const data = response.records.map(t => {
+						const { Transaction, Method, Contract, User, Params } = t.fields
+						return [Transaction, Method, Params, User]
+					})
+
+					$('#example').DataTable( {
+						data,
+						columns: [
+							{ title: "Transaction" },
+							{ title: "Method" },
+							{ title: "Param" },
+							{ title: "User" },
+						],
+						columnDefs: [
+							{
+								"render": function ( data, type, row ) {
+									return `<a href="https://explorer.testnet.near.org/transactions/${data}" target="_blank">${data.substr(0,10)}...</a>`;
+								},
+								"targets": 0
+							}
+						]
+					})
+				})	
+				.catch(err => {
+					console.log({err})
+				})		
+		});
+	</script>
+</body>
+</html>
