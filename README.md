@@ -19,5 +19,5 @@ Trading Journal
 </div>
 
 ## NEAR Blockchain Interaction
-The contract in `assembly/main.ts` provides methods to get, store in blockchain and reset likes for markets inside the `Markets` tab. Check <a href="https://trading-journal-txs.netlify.app/" target="_blank">trading-journal-txs.netlify.app</a> for more info.
+The contract in `assembly/main.ts` provides methods to get, store and reset likes in blockchain for markets inside the `Markets` tab. Check <a href="https://trading-journal-txs.netlify.app/" target="_blank">trading-journal-txs.netlify.app</a> for app's transactions summary.
 
