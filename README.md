@@ -21,3 +21,5 @@ Trading Journal
 ## NEAR Blockchain Interaction
 The contract in `assembly/main.ts` provides methods to get, store and reset likes in blockchain for markets inside the `Markets` tab. Check <a href="https://trading-journal-txs.netlify.app/" target="_blank">trading-journal-txs.netlify.app</a> for app's transactions summary.
 
+### Update March 8, 2022
+We've also implemented testnet token transactions inside the app. Now when you activate your app account a NEAR subaccount will be assigned to your profile like "jhondoe.tjdev.testnet" with 10 NEAR testnet tokens. Those tokens can be used to reward other users for share some useful ALPHA ;) in the Public Board. Check <a href="https://trading-journal-txs.netlify.app/" target="_blank">trading-journal-txs.netlify.app</a> for app's transactions summary.
