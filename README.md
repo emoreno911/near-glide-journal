@@ -1,6 +1,9 @@
 Trading Journal
 =================================
 
+## Glide App
+Here ==> <a href="https://trading-journal.glideapp.io/" target="_blank">trading-journal.glideapp.io</a>
+
 ## Description
 
 <div class="about">
