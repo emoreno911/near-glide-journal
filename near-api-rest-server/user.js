@@ -51,7 +51,8 @@ module.exports = {
     CreateAccount: async function (new_account) {
         const account = await blockchain.GetMasterAccount();
 
-        const res = await account.createAccount(new_account.account_id, new_account.public_key, '200000000000000000000000');
+        // 10NEAR airdrop to subaccount
+        const res = await account.createAccount(new_account.account_id, new_account.public_key, '10000000000000000000000000');
 
         try {
             if (res['status'].hasOwnProperty('SuccessValue')) {

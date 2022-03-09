@@ -211,5 +211,40 @@ module.exports = {
         } catch (e) {
             return api.reject(e);
         }
+    },
+
+    SendTokens: async function (sender, receiver, amount, privateKey, networkId = 'testnet') {
+        const { KeyPair, keyStores, utils } = nearApi;
+        // sets up an empty keyStore object in memory using near-api-js
+        const keyStore = new keyStores.InMemoryKeyStore();
+        // creates a keyPair from the private key provided in your .env file
+        const keyPair = KeyPair.fromString(privateKey);
+        // adds the key you just created to your keyStore which can hold multiple keys
+        await keyStore.setKey(networkId, sender, keyPair);
+      
+        // configuration used to connect to NEAR
+        const config = {
+          networkId,
+          keyStore,
+          nodeUrl: `https://rpc.${networkId}.near.org`,
+          walletUrl: `https://wallet.${networkId}.near.org`,
+          helperUrl: `https://helper.${networkId}.near.org`,
+          explorerUrl: `https://explorer.${networkId}.near.org`
+        };
+      
+        // connect to NEAR! :) 
+        const near = await nearApi.connect(config);
+        const senderAccount = await near.account(sender);
+      
+        try {
+          // here we are using near-api-js utils to convert yoctoNEAR back into a floating point
+          const amountStr = amount.toString()
+          const _amount = utils.format.parseNearAmount(amountStr);
+          console.log(`Sending ${utils.format.formatNearAmount(_amount)}Ⓝ from ${sender} to ${receiver}...`);
+          return await senderAccount.sendMoney(receiver, _amount);
+        } catch(e) {
+            fs.appendFileSync('./log.txt', '\n'+JSON.stringify(e))
+            return api.reject(e);
+        }
     }
 };

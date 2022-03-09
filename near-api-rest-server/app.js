@@ -237,6 +237,7 @@ const init = async () => {
             if (status)
                 return {
                     text: `Account ${name} created. Public key: ${account.public_key}`,
+                    id: name
                 };
             else return {text: 'Error'};
         },
@@ -422,6 +423,30 @@ const init = async () => {
                 network
             );
         },
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/send_tokens',
+        handler: async (request, h) => {
+            request = processRequest(request);
+
+            try {
+                const _path = `./storage/${request.payload.sender}.json`;                
+                const senderPrivatekey = JSON.parse(fs.readFileSync(_path, 'utf8')).private_key;          
+                return await blockchain.SendTokens(
+                    request.payload.sender,
+                    request.payload.receiver,
+                    request.payload.amount,
+                    senderPrivatekey
+                );
+            } catch (e) {
+                return {
+                    error: true,
+                    message: "PK not found"
+                }
+            } 
+        }
     });
 
     await server.start();
