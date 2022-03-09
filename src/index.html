@@ -36,6 +36,11 @@
 			font-weight: 700;
 			color: #9450FC;
 		}
+		.github_logo {
+			width: 16px;
+			height: 16px;
+			vertical-align: text-top;
+		}
 	</style>
 
 	<title>Trading Journal</title>
@@ -47,7 +52,7 @@
 			<span>Trading Journal</span>
 		</h2>
 		<div class="about">
-			<p>Trading Journal is an app who allow you to keep track of all your trades in one single place</p>
+			Trading Journal is an app who allow you to keep track of all your trades in one single place</p>
 			<p>
 				This app is using the following services and APIs: 
 				<ul>
@@ -59,10 +64,13 @@
 					<li><b>Quickchart.io</b> for sparkline charts</li>
 				</ul>
 			</p>
-			<p>
+			<h5>
 				<a href="https://trading-journal.glideapp.io/" target="_blank">Glide App</a> | 
-				<a href="https://github.com/emoreno911/near-glide-journal" target="_blank">Contract Repo</a>
-			</p>
+				<a href="https://github.com/emoreno911/near-glide-journal" target="_blank">
+					<img src="github.png" alt="github logo" class="github_logo">
+					Contract Repo
+				</a>
+			</h5>
 		</div>
 		
 		<div class="mt-5 mb-3">
@@ -85,17 +93,22 @@
 				.then(r => r.json())
 				.then(response => {
 					const data = response.records.map(t => {
-						const { Transaction, Method, Contract, User, Params } = t.fields
-						return [Transaction, Method, Params, User]
+						const { Transaction, Method, Contract, User, Params, Index } = t.fields
+						return [Transaction, Method, Params, User, Index]
 					})
+
+					const orderedData = data.sort((a,b) => a[4] - b[4])
+					console.log(orderedData)
 
 					$('#example').DataTable( {
 						data,
+						order: [[ 4, "desc" ]],
 						columns: [
 							{ title: "Transaction" },
 							{ title: "Method" },
 							{ title: "Param" },
 							{ title: "User" },
+							{ title: "Index" },
 						],
 						columnDefs: [
 							{
@@ -103,7 +116,11 @@
 									return `<a href="https://explorer.testnet.near.org/transactions/${data}" target="_blank">${data.substr(0,10)}...</a>`;
 								},
 								"targets": 0
-							}
+							},
+							{
+                "targets": [ 4 ],
+                "visible": false
+            	}
 						]
 					})
 				})	
